@@ -23,7 +23,18 @@ bird_sprites = [bird_image]
 
 pipe_image = pygame.image.load("C:/Users/User/Desktop/Flybird-pygame/pipe.png").convert_alpha() # adjust resolution 
 pipe_width = 70 # width of pipes
-pipe_gap = 50
+pipe_gap = 100
+
+
+
+
+
+
+
+
+
+
+
 
 
 #------------------------GAME FUNCTION--------------------------------
@@ -49,6 +60,21 @@ def draw_pipes(pipes):
         screen.blit(pipe_image, (pipe_bottom.x, pipe_bottom.y))
 
 
+
+
+#------------------------MAIN GAME LOOP-------------------------------
+global bird_Y
+bird_X = 50
+bird_Y = HEIGHT // 2
+bird_velocity = 0
+bird_index = 0
+bird_animation_timer = 0
+gravity = 0.5
+jump_strengt = -5
+
+
+
+
 pipes = [create_pipe()]
 
 
@@ -64,10 +90,25 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                bird_velocity = jump_strengt
+    bird_velocity += gravity
+    bird_Y += bird_velocity
+    bird_animation_timer += 1
+    
+    if bird_animation_timer % 5 == 0:
+        bird_index = (bird_index + 1 ) % len(bird_sprites)
+    
+    bird_image_current = bird_sprites[bird_index]
+
+    bird_rect = bird_image_current.get_rect(center =(bird_X, int(bird_Y)))
+    screen.blit(bird_image_current, bird_rect)
+
     draw_pipes(pipes)
     #add random pipes
     if pipes [-1][0].x < WIDTH - 200:
         pipes.append(create_pipe())         
     pygame.display.update()
-    clock.tick(50)
+    clock.tick(30)
 pygame.quit()
