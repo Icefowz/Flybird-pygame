@@ -33,7 +33,7 @@ pipe_gap = 50
 def create_pipe():
     height_top = random.randint(50, HEIGHT - pipe_gap - 50)
     pipe_top = pygame.Rect(WIDTH, 0, pipe_width, height_top)
-    pipe_bottom = pygame.rect(WIDTH, height_top, + pipe_gap,
+    pipe_bottom = pygame.Rect(WIDTH, height_top + pipe_gap,
     pipe_width, HEIGHT - (height_top + pipe_gap))
     return(pipe_top, pipe_bottom)
 
@@ -48,12 +48,26 @@ def draw_pipes(pipes):
         screen.blit(top_image, (pipe_top.x, pipe_top.height - top_image.get_height()))
         screen.blit(pipe_image, (pipe_bottom.x, pipe_bottom.y))
 
+
+pipes = [create_pipe()]
+
+
+
+
+
+
+
+
 running = True 
 while running:
     screen.fill(color)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+    draw_pipes(pipes)
+    #add random pipes
+    if pipes [-1][0].x < WIDTH - 200:
+        pipes.append(create_pipe())         
     pygame.display.update()
-    clock.tick(5)
+    clock.tick(50)
 pygame.quit()
