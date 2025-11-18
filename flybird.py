@@ -16,12 +16,12 @@ clock = pygame.time.Clock()
 
 #-------------------------------LOAD IMAGE -----------------------------------
 
-bird_image = pygame.image.load("C:/Users/User/Desktop/Flybird-pygame/bird1.png").convert_alpha()
+bird_image = pygame.image.load("C:/Users/User/Documents/Flybird-pygame/bird1.png").convert_alpha()
 bird_image = pygame.transform.scale(bird_image, (34, 24))
 
 bird_sprites = [bird_image]
 
-pipe_image = pygame.image.load("C:/Users/User/Desktop/Flybird-pygame/pipe.png").convert_alpha() # adjust resolution 
+pipe_image = pygame.image.load("C:/Users/User/Documents/Flybird-pygame/pipe.png").convert_alpha() # adjust resolution 
 pipe_width = 70 # width of pipes
 pipe_gap = 100
 
