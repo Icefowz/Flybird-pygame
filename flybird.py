@@ -16,7 +16,7 @@ clock = pygame.time.Clock()
 
 #-------------------------------LOAD IMAGE -----------------------------------
 
-bird_image = pygame.image.load("C:/Users/User/Desktop/Flybird-pygame/bird1  .png").convert_alpha()
+bird_image = pygame.image.load("C:/Users/User/Desktop/Flybird-pygame/bird1.png").convert_alpha()
 bird_image = pygame.transform.scale(bird_image, (34, 24))
 
 bird_sprites = [bird_image]
@@ -38,6 +38,15 @@ def create_pipe():
     return(pipe_top, pipe_bottom)
 
 
+pipe_velocity = 3
+def draw_pipes(pipes):
+    for pipe in pipes:
+        pipe_top, pipe_bottom = pipe
+        pipe_top.x -= pipe_velocity
+        pipe_bottom.x -= pipe_velocity
+        top_image = pygame.transform.flip(pipe_image, False, True)
+        screen.blit(top_image, (pipe_top.x, pipe_top.height - top_image.get_height()))
+        screen.blit(pipe_image, (pipe_bottom.x, pipe_bottom.y))
 
 running = True 
 while running:
