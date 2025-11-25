@@ -1,3 +1,4 @@
+from asyncio.windows_utils import pipe
 from turtle import width
 import pygame
 import random
@@ -23,7 +24,10 @@ bird_sprites = [bird_image]
 
 pipe_image = pygame.image.load("C:/Users/User/Documents/Flybird-pygame/pipe.png").convert_alpha() # adjust resolution 
 pipe_width = 70 # width of pipes
-pipe_gap = 100
+pipe_gap = 150
+
+background_image = pygame.image.load("/Users/User/Documents/Flybird-pygame/background.png").convert_alpha()
+background_image = pygame.transform.scale(background_image, (400,600))
 
 
 
@@ -31,9 +35,9 @@ pipe_gap = 100
 
 
 
-
-
-
+#---------------------score--------------------------
+score = 0
+font = pygame.font.SysFont(None, 40)
 
 
 
@@ -46,7 +50,7 @@ def create_pipe():
     pipe_top = pygame.Rect(WIDTH, 0, pipe_width, height_top)
     pipe_bottom = pygame.Rect(WIDTH, height_top + pipe_gap,
     pipe_width, HEIGHT - (height_top + pipe_gap))
-    return(pipe_top, pipe_bottom)
+    return(pipe_top, pipe_bottom,)
 
 
 pipe_velocity = 3
@@ -63,6 +67,8 @@ def draw_pipes(pipes):
 
 
 #------------------------MAIN GAME LOOP-------------------------------
+
+
 global bird_Y
 bird_X = 50
 bird_Y = HEIGHT // 2
@@ -70,7 +76,7 @@ bird_velocity = 0
 bird_index = 0
 bird_animation_timer = 0
 gravity = 0.5
-jump_strengt = -5
+jump_strengt = -7 
 
 
 
@@ -86,7 +92,8 @@ pipes = [create_pipe()]
 
 running = True 
 while running:
-    screen.fill(color)
+    screen.blit(background_image,(0,0))
+    
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -106,9 +113,26 @@ while running:
     screen.blit(bird_image_current, bird_rect)
 
     draw_pipes(pipes)
+
+    for pipe_top, pipe_bottom in pipes:
+        if bird_rect.colliderect(pipe_top) or bird_rect.colliderect(pipe_bottom) or (bird_Y < 0 or bird_Y > HEIGHT):
+            running = False
+    
+    
+    
+    #score    
+    
+
+
     #add random pipes
-    if pipes [-1][0].x < WIDTH - 200:
-        pipes.append(create_pipe())         
+    if  pipes [-1][0].x < WIDTH - 200:
+        pipes.append(create_pipe())
+    if pipes[0][0].x + pipe_width < 0:
+        pipes.pop(0) 
+        score += 1
+    score_text = font.render(f"Score:{score}",True, (255,255,255))
+    screen.blit(score_text, (10, 20))        
     pygame.display.update()
-    clock.tick(30)
+    clock.tick(40)
+    
 pygame.quit()
