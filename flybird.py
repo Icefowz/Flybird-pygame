@@ -17,16 +17,16 @@ clock = pygame.time.Clock()
 
 #-------------------------------LOAD IMAGE -----------------------------------
 
-bird_image = pygame.image.load("C:/Users/User/Documents/Flybird-pygame/bird1.png").convert_alpha()
+bird_image = pygame.image.load("C:/Users/User/Desktop/Flybird-pygame-main/bird1.png").convert_alpha()
 bird_image = pygame.transform.scale(bird_image, (34, 24))
 
 bird_sprites = [bird_image]
 
-pipe_image = pygame.image.load("C:/Users/User/Documents/Flybird-pygame/pipe.png").convert_alpha() # adjust resolution 
+pipe_image = pygame.image.load("C:/Users/User/Desktop/Flybird-pygame-main/pipe.png").convert_alpha() # adjust resolution 
 pipe_width = 70 # width of pipes
 pipe_gap = 150
 
-background_image = pygame.image.load("/Users/User/Documents/Flybird-pygame/background.png").convert_alpha()
+background_image = pygame.image.load("/Users/User/Desktop/Flybird-pygame-main/background.png").convert_alpha()
 background_image = pygame.transform.scale(background_image, (400,600))
 
 
@@ -68,71 +68,80 @@ def draw_pipes(pipes):
 
 #------------------------MAIN GAME LOOP-------------------------------
 
-
-global bird_Y
-bird_X = 50
-bird_Y = HEIGHT // 2
-bird_velocity = 0
-bird_index = 0
-bird_animation_timer = 0
-gravity = 0.5
-jump_strengt = -7 
-
-
-
-
-pipes = [create_pipe()]
+def main_game():
+    global bird_Y
+    bird_X = 50
+    bird_Y = HEIGHT // 2
+    bird_velocity = 0
+    bird_index = 0
+    bird_animation_timer = 0
+    gravity = 0.5
+    jump_strengt = -7 
+    score = 0
+    font = pygame.font.SysFont(None, 40)
 
 
 
+    pipes = [create_pipe()]
 
 
 
 
 
-running = True 
-while running:
-    screen.blit(background_image,(0,0))
-    
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE:
-                bird_velocity = jump_strengt
-    bird_velocity += gravity
-    bird_Y += bird_velocity
-    bird_animation_timer += 1
-    
-    if bird_animation_timer % 5 == 0:
-        bird_index = (bird_index + 1 ) % len(bird_sprites)
-    
-    bird_image_current = bird_sprites[bird_index]
-
-    bird_rect = bird_image_current.get_rect(center =(bird_X, int(bird_Y)))
-    screen.blit(bird_image_current, bird_rect)
-
-    draw_pipes(pipes)
-
-    for pipe_top, pipe_bottom in pipes:
-        if bird_rect.colliderect(pipe_top) or bird_rect.colliderect(pipe_bottom) or (bird_Y < 0 or bird_Y > HEIGHT):
-            running = False
-    
-    
-    
-    #score    
-    
 
 
-    #add random pipes
-    if  pipes [-1][0].x < WIDTH - 200:
-        pipes.append(create_pipe())
-    if pipes[0][0].x + pipe_width < 0:
-        pipes.pop(0) 
-        score += 1
-    score_text = font.render(f"Score:{score}",True, (255,255,255))
-    screen.blit(score_text, (10, 20))        
-    pygame.display.update()
-    clock.tick(40)
-    
+
+    running = True 
+    while running:
+        screen.blit(background_image,(0,0))
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    bird_velocity = jump_strengt
+        bird_velocity += gravity
+        bird_Y += bird_velocity
+        bird_animation_timer += 1
+        
+        if bird_animation_timer % 5 == 0:
+            bird_index = (bird_index + 1 ) % len(bird_sprites)
+        
+        bird_image_current = bird_sprites[bird_index]
+
+        bird_rect = bird_image_current.get_rect(center =(bird_X, int(bird_Y)))
+        screen.blit(bird_image_current, bird_rect)
+
+        draw_pipes(pipes)
+
+        for pipe_top, pipe_bottom in pipes:
+            if bird_rect.colliderect(pipe_top) or bird_rect.colliderect(pipe_bottom) or (bird_Y < 0 or bird_Y > HEIGHT):
+                running = False
+        
+        
+        
+        #score    
+        
+
+
+        #add random pipes
+        if  pipes [-1][0].x < WIDTH - 200:
+            pipes.append(create_pipe())
+        if pipes[0][0].x + pipe_width < 0:
+            pipes.pop(0) 
+            score += 1
+        score_text = font.render(f"Score:{score}",True, (255,255,255))
+        screen.blit(score_text, (10, 20))        
+        pygame.display.update()
+        clock.tick(40)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return "QUIT"
+while True:
+        result = main_game()
+
+        if result == "QUIT":
+            break
 pygame.quit()
